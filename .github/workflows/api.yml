@@ -13,11 +13,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    # Semua perintah (run) akan dieksekusi di dalam folder ./api-test
-    defaults:
-      run:
-        working-directory: ./api-test 
 
     steps:
       - name: Checkout Repository
