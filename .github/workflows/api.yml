@@ -22,16 +22,16 @@ jobs:
         distribution: 'temurin'
 
     - name: Setup Chrome
-      uses: browser-action/setup-chrome@v1
+      uses: browser-action/setup-chrome@latest
 
     - name: Setup Gradle
       run: chmod +x gradlew
 
     - name: Execute Test
-      run: ./gradlew apitest
+      run: ./gradlew clean apitest
 
     - name: Archive Test Result
-      uses: action/upload-artifact@3.1.0
+      uses: action/upload-artifact@v4
       if: always()
       with:
         name: Cucumber Report
