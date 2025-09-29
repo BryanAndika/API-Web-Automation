@@ -21,6 +21,9 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Setup Chrome
+      uses: browser-action/setup-chrome@v1
+
     - name: Setup Gradle
       run: chmod +x gradlew
 
