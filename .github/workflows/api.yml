@@ -2,39 +2,49 @@ name: API Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+
+permissions:
+  # Hanya perlu 'contents: read' untuk checkout kode
+  contents: read 
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    
+    # Semua perintah (run) akan dieksekusi di dalam folder ./api-test
+    defaults:
+      run:
+        working-directory: ./api-test 
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Setup Chrome
-      uses: browser-action/setup-chrome@latest
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4.0.0
+        with:
+          java-version: '11'
+          distribution: 'temurin'
 
-    - name: Setup Gradle
-      run: chmod +x gradlew
+      # Langkah setup Chrome dihapus karena umumnya tidak diperlukan untuk API Test.
+      # Jika Anda membutuhkannya, kembalikan langkah ini.
 
-    - name: Execute Test
-      run: ./gradlew clean apitest
+      - name: Build, Run Tests, and Prepare Allure
+        run: |
+          # Jadikan gradlew executable
+          chmod +x gradlew 
 
-    - name: Archive Test Result
-      uses: action/upload-artifact@v4
-      if: always()
-      with:
-        name: Cucumber Report
+      - name: Execute Test
+        run: ./gradlew clean apitest
+
+      - name: Archive Test Result
+        uses: action/upload-artifact@v4
+        if: always()
+        with:
+         name: Cucumber Report
         path: reports
       
       
