@@ -1,0 +1,45 @@
+name: Web Test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  # Hanya perlu 'contents: read' untuk checkout kode
+  contents: read 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4.0.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install Google Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Build, Run Tests
+        run: |
+          # Jadikan gradlew executable
+          chmod +x gradlew 
+
+      - name: Execute Test
+        run: ./gradlew clean webtest
+
+      - name: Archive Test Result
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+         name: Cucumber Report
+         path: reports
+      
+      
